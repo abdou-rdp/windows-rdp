@@ -19,10 +19,8 @@ jobs:
           Set-ItemProperty -Path 'HKLM:\System\CurrentControlSet\Control\Terminal Server' -Name 'fDenyTSConnections' -Value 0
           Enable-NetFirewallRule -DisplayGroup "Remote Desktop"
 
-      - name: Start ngrok in background and wait
+      - name: Start ngrok and keep alive
         run: |
           Start-Process -NoNewWindow -FilePath ./ngrok/ngrok.exe -ArgumentList "tcp 3389"
-          Start-Sleep -Seconds 10
+          Start-Sleep -Seconds 99999
 
-      - name: Output Reminder
-        run: echo "Check ngrok logs for the TCP endpoint in the previous steps."
