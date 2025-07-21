@@ -11,7 +11,6 @@ jobs:
           Invoke-WebRequest https://bin.equinox.io/c/bNyj1mQVY4c/ngrok-stable-windows-amd64.zip -OutFile ngrok.zip
           Expand-Archive ngrok.zip -DestinationPath ngrok
           ./ngrok/ngrok.exe authtoken 2zqOBvSupFpiW2SCf3IgxHbwykJ_7zotr39k1VLjgMbcYZGtv
-
       - name: Enable RDP User
         run: |
           net user kamel123 MyStrong123 /add
@@ -19,7 +18,6 @@ jobs:
           Set-ItemProperty -Path 'HKLM:\System\CurrentControlSet\Control\Terminal Server' -Name 'fDenyTSConnections' -Value 0
           Enable-NetFirewallRule -DisplayGroup "Remote Desktop"
 
-      - name: Start ngrok Tunnel
+      - name: Start ngrok TCP tunnel and Print endpoint
         run: |
-          Start-Process -NoNewWindow -FilePath ./ngrok/ngrok.exe -ArgumentList "tcp 3389"
-          Start-Sleep -Seconds 10
+          ./ngrok/ngrok.exe tcp 3389
