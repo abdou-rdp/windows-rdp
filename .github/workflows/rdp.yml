@@ -1,11 +1,11 @@
 name: RDP
 
 on:
-  workflow_dispatch:  # لكي تبدأه يدوياً
+  workflow_dispatch:  # لتشغيل الـ workflow يدوياً من GitHub
 
 jobs:
   build:
-    runs-on: [self-hosted, windows]  # جهازك المحلي بنظام ويندوز
+    runs-on: [self-hosted, Windows, X64]  # هذه الـ labels مطابقة تماماً لجهازك الحالي
     steps:
       - name: Download and Extract ngrok
         run: |
@@ -23,4 +23,4 @@ jobs:
       - name: Start ngrok and keep alive
         run: |
           Start-Process -NoNewWindow -FilePath ./ngrok/ngrok.exe -ArgumentList "tcp 3389"
-          Start-Sleep -Seconds 86400  # بدل 99999 وقت منطقي 24 ساعة تقريباً
+          Start-Sleep -Seconds 86400  # وقت أطول حسب رغبتك
