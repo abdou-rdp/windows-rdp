@@ -1,11 +1,12 @@
-name: RDP
+name: RDP Access
 
 on:
-  workflow_dispatch:  # لتشغيل الـ workflow يدوياً من GitHub
+  workflow_dispatch:  # لتشغيله يدوياً
 
 jobs:
   build:
-    runs-on: [self-hosted, Windows, X64]  # هذه الـ labels مطابقة تماماً لجهازك الحالي
+    runs-on: [self-hosted, Windows, X64]
+
     steps:
       - name: Download and Extract ngrok
         run: |
@@ -20,7 +21,12 @@ jobs:
           Set-ItemProperty -Path 'HKLM:\System\CurrentControlSet\Control\Terminal Server' -Name 'fDenyTSConnections' -Value 0
           Enable-NetFirewallRule -DisplayGroup "Remote Desktop"
 
-      - name: Start ngrok and keep alive
+      - name: Start ngrok in Background
         run: |
           Start-Process -NoNewWindow -FilePath ./ngrok/ngrok.exe -ArgumentList "tcp 3389"
-          Start-Sleep -Seconds 86400  # وقت أطول حسب رغبتك
+          Start-Sleep -Seconds 10  # انتظر ngrok يشتغل قبل قراءة الرابط
+
+      - name: Show ngrok tunnel URL
+        run: |
+          Invoke-WebRequest -UseBasicParsing -Uri http://127.0.0.1:4040/api/tunnels | ConvertFrom-Json | Select-Object -ExpandProperty tunnels | Select-Object -ExpandProperty public_url
+          Start-Sleep -Seconds 86400
