@@ -1,7 +1,6 @@
 name: RDP
 
-on: [self-hosted]
-
+runs-on: self-hosted
 jobs:
   build:
     runs-on: windows-latest
